@@ -1,0 +1,27 @@
+version: "4.23"
+
+services:
+  go-app:
+    container_name: go-app
+    image: acoronado/go-app:1.0.0
+    build: .
+    environment:
+      DATABASE_URL: "host=go_db user=axel password=apipostgres dbname=gorm sslmode=disable"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - go_db
+  go_db:
+    container_name: ice-cream-dbpsql
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: apipostgres
+      POSTGRES_USER: axel
+      POSTGRES_DB: gorm
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
